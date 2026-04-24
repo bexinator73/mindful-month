@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#8ba892">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mindful Month">
+<title>Bex's Mindful Month</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%238ba892'/%3E%3Ctext x='90' y='115' font-size='90' text-anchor='middle' fill='white' font-family='system-ui'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E">
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { overscroll-behavior-y: contain; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #faf7f2;
+  color: #2d2a26;
+  line-height: 1.5;
+  padding: 20px 16px 60px;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.01em; }
+h1 { font-size: 1.6rem; color: #2d2a26; }
+h2 { font-size: 1.1rem; color: #3d4a3f; margin-bottom: 12px; }
+h3 { font-size: 0.95rem; color: #5a6a5d; }
+.subtitle { color: #7a7068; font-size: 0.9rem; margin-top: 4px; font-style: italic; }
+
+.card {
+  background: #ffffff;
+  border: 1px solid #ebe4d8;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(74, 60, 40, 0.04);
+}
+
+.hero {
+  background: linear-gradient(135deg, #8ba892 0%, #a8c0a0 100%);
+  color: #fafaf7;
+  border: none;
+}
+.hero h1 { color: #ffffff; }
+.hero .subtitle { color: #e8efe6; }
+.points-big {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 16px 0 2px;
+  letter-spacing: -0.02em;
+}
+.points-label { font-size: 0.85rem; color: #e8efe6; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.facial-progress {
+  margin-top: 18px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.facial-bar {
+  height: 14px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 7px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.facial-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f4d4a8, #e8b87a);
+  border-radius: 7px;
+  transition: width 0.5s ease;
+}
+.facial-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #ffffff;
+  gap: 8px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+@media (max-width: 500px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+.stat {
+  background: #ffffff;
+  border: 1px solid #ebe4d8;
+  border-radius: 10px;
+  padding: 12px 10px;
+  text-align: center;
+}
+.stat-value { font-size: 1.4rem; font-weight: 700; color: #3d4a3f; }
+.stat-label { font-size: 0.72rem; color: #7a7068; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.milestone {
+  border: 1.5px solid #ebe4d8;
+  border-radius: 10px;
+  padding: 12px;
+  background: #faf7f2;
+  transition: all 0.3s ease;
+}
+.milestone.unlocked {
+  border-color: #8ba892;
+  background: #f1f7ed;
+}
+.milestone-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.milestone-check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid #d4ccbc;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 700;
+}
+.milestone.unlocked .milestone-check {
+  background: #7a9b7e;
+  border-color: #7a9b7e;
+}
+.milestone-points { font-weight: 700; color: #3d4a3f; font-size: 0.95rem; }
+.milestone-title { font-size: 0.88rem; color: #2d2a26; margin: 2px 0; font-weight: 500; }
+.milestone-desc { font-size: 0.78rem; color: #7a7068; line-height: 1.4; }
+
+.week { margin-top: 14px; }
+.week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 4px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.week-title { font-size: 0.95rem; font-weight: 600; color: #3d4a3f; }
+.week-cap {
+  font-size: 0.78rem;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.cap-safe { background: #e8f0e4; color: #4a6a4e; }
+.cap-close { background: #fbeed4; color: #8a6a2a; }
+.cap-over { background: #f5dcd4; color: #8a4a3a; }
+
+.week-bar {
+  height: 8px;
+  background: #ebe4d8;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.week-bar-fill {
+  height: 100%;
+  background: #a8c0a0;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+}
+.week-bar-fill.close { background: #e0b060; }
+.week-bar-fill.over { background: #c87060; }
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .days { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+}
+.day {
+  background: #ffffff;
+  border: 1px solid #ebe4d8;
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.day.logged { border-color: #b8ccb8; background: #fafcf8; }
+.day-date { font-size: 0.65rem; color: #7a7068; text-transform: uppercase; letter-spacing: 0.04em; }
+.day-num { font-size: 0.95rem; font-weight: 700; color: #2d2a26; margin: 2px 0 6px; }
+.day-points {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-top: 5px;
+  min-height: 14px;
+}
+.pt-pos { color: #4a7a50; }
+.pt-neu { color: #7a7068; }
+.pt-neg { color: #b85840; }
+
+.drink-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-top: 4px;
+}
+.drink-btn {
+  border: 1px solid #d4ccbc;
+  background: #faf7f2;
+  color: #5a5048;
+  border-radius: 6px;
+  padding: 6px 2px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  min-height: 28px;
+  touch-action: manipulation;
+}
+.drink-btn:active { transform: scale(0.95); }
+.drink-btn:hover { background: #f0ebdf; }
+.drink-btn.selected {
+  background: #7a9b7e;
+  border-color: #7a9b7e;
+  color: #ffffff;
+}
+.drink-btn.selected.drinks-2 { background: #c8a968; border-color: #c8a968; }
+.drink-btn.selected.drinks-3 { background: #b85840; border-color: #b85840; }
+
+.encouragement {
+  background: #fdf8ef;
+  border: 1px solid #f0e4cc;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  font-size: 0.92rem;
+  color: #5a4a30;
+  font-style: italic;
+  line-height: 1.55;
+}
+.encouragement strong { font-style: normal; color: #3d3420; }
+
+.sync-section {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f5f1ea;
+  border: 1px solid #e4ddcf;
+  border-radius: 12px;
+}
+.sync-section h3 { margin-bottom: 6px; }
+.sync-section p { font-size: 0.85rem; color: #6a6058; margin-bottom: 10px; line-height: 1.5; }
+.sync-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sync-btn {
+  flex: 1;
+  min-width: 120px;
+  background: #ffffff;
+  border: 1px solid #c8bfae;
+  color: #3d4a3f;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+.sync-btn:hover { background: #f5f1ea; border-color: #8ba892; }
+.sync-btn:active { transform: scale(0.98); }
+
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 25, 20, 0.5);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop.active { display: flex; }
+.modal {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal h3 { margin-bottom: 8px; color: #2d2a26; }
+.modal p { font-size: 0.88rem; color: #6a6058; margin-bottom: 12px; line-height: 1.5; }
+.modal textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  border: 1px solid #d4ccbc;
+  border-radius: 8px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  resize: vertical;
+  background: #faf7f2;
+  color: #2d2a26;
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+.modal-btn {
+  background: #8ba892;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+.modal-btn.secondary {
+  background: #ffffff;
+  color: #5a5048;
+  border: 1px solid #c8bfae;
+}
+
+.reset-link {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.78rem;
+  color: #a09688;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.reset-link:hover { color: #5a5048; }
+
+.today-badge {
+  display: inline-block;
+  background: #c8a968;
+  color: #ffffff;
+  font-size: 0.58rem;
+  padding: 1px 4px;
+  border-radius: 4px;
+  margin-left: 2px;
+  vertical-align: middle;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.day.today { border-color: #c8a968; background: #fdf8ef; }
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3d4a3f;
+  color: #fafcf8;
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 200;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="card hero">
+  <h1>Bex's Mindful Month</h1>
+  <p class="subtitle">A gentle reset — April 27 through May 26, 2026</p>
+  <div class="points-big" id="totalPoints">0</div>
+  <div class="points-label">Total Points</div>
+  <div class="facial-progress">
+    <div class="facial-label">
+      <span>Progress toward your facial</span>
+      <span id="facialPct">0%</span>
+    </div>
+    <div class="facial-bar"><div class="facial-fill" id="facialFill" style="width: 0%"></div></div>
+    <div class="facial-label" style="margin-top: 8px;">
+      <span id="facialMsg">200 points away from booking your $170 facial</span>
+    </div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat"><div class="stat-value" id="daysLogged">0</div><div class="stat-label">Days Logged</div></div>
+  <div class="stat"><div class="stat-value" id="zeroDays">0</div><div class="stat-label">Zero Days</div></div>
+  <div class="stat"><div class="stat-value" id="totalDrinks">0</div><div class="stat-label">Total Drinks</div></div>
+  <div class="stat"><div class="stat-value" id="avgDrinks">0.0</div><div class="stat-label">Avg / Day</div></div>
+</div>
+
+<div class="card">
+  <h2>Milestone Rewards</h2>
+  <p class="subtitle" style="margin-bottom:4px;">Small celebrations along the way — you deserve to mark the progress.</p>
+  <div class="milestones" id="milestones"></div>
+</div>
+
+<div class="card">
+  <h2>Daily Check-In</h2>
+  <p class="subtitle" style="margin-bottom: 6px;">Tap a number for each day. 0 = 10 pts · 1 = 5 pts · 2 = 0 pts · 3+ = -10 pts.</p>
+  <p class="subtitle" style="margin-bottom: 16px; color: #8a7a68;">Weekly cap reminder: aim for 7 drinks or fewer per week.</p>
+  <div id="weeks"></div>
+</div>
+
+<div class="encouragement">
+  <strong>A note to you, Bex:</strong> This isn't about perfection — it's about awareness. A social neighborhood with good food and good people is a <em>gift</em>, not something to white-knuckle through. A 2-drink day isn't a failure; it's a zero on the scoreboard and a chance to ride that weekly cap strategically. Be kind to yourself, notice what you notice, and let those points add up. You've got this.
+</div>
+
+<div class="sync-section">
+  <h3>Moving data between devices</h3>
+  <p>Your data lives on this device. If you want to move it to your phone or desktop, export here and import on the other device. Quick and tidy.</p>
+  <div class="sync-btns">
+    <button class="sync-btn" id="exportBtn">Export data</button>
+    <button class="sync-btn" id="importBtn">Import data</button>
+  </div>
+</div>
+
+<a class="reset-link" id="resetBtn">Reset all data (start over)</a>
+
+<div class="modal-backdrop" id="exportModal">
+  <div class="modal">
+    <h3>Export your data</h3>
+    <p>Copy this text and paste it into the Import box on your other device.</p>
+    <textarea id="exportText" readonly></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="exportClose">Close</button>
+      <button class="modal-btn" id="exportCopy">Copy to clipboard</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="importModal">
+  <div class="modal">
+    <h3>Import your data</h3>
+    <p>Paste the text from your other device below. This will replace anything already logged on this device.</p>
+    <textarea id="importText" placeholder="Paste here..."></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="importCancel">Cancel</button>
+      <button class="modal-btn" id="importConfirm">Import</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'bex_mindful_drinks_v1';
+  const START_DATE = new Date(2026, 3, 27);
+  const TOTAL_DAYS = 30;
+  const FACIAL_TARGET = 200;
+
+  const MILESTONES = [
+    { pts: 50, title: 'Something small & lovely', desc: 'A luxurious bath product, a beautiful candle, or favorite loose-leaf tea (~$15)' },
+    { pts: 100, title: 'A slow morning out', desc: 'A special coffee shop visit with your journal, or a nice lunch on your own (~$25)' },
+    { pts: 150, title: 'A meaningful treat', desc: 'A new book plus a spa product, or a massage add-on at your next appointment (~$40)' },
+    { pts: 200, title: 'Book the facial!', desc: 'The $170 facial you\'ve been wanting. You earned every minute of it.' }
+  ];
+
+  const DRINK_POINTS = { 0: 10, 1: 5, 2: 0, 3: -10 };
+
+  function buildDays() {
+    const days = [];
+    for (let i = 0; i < TOTAL_DAYS; i++) {
+      const d = new Date(START_DATE);
+      d.setDate(START_DATE.getDate() + i);
+      days.push(d);
+    }
+    return days;
+  }
+
+  function dateKey(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  function saveData(d) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch (e) {}
+  }
+
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  let data = loadData();
+  const days = buildDays();
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function render() {
+    const weeksEl = document.getElementById('weeks');
+    weeksEl.innerHTML = '';
+
+    let totalPoints = 0;
+    let daysLogged = 0;
+    let zeroDays = 0;
+    let totalDrinks = 0;
+
+    const weekCount = Math.ceil(TOTAL_DAYS / 7);
+    for (let w = 0; w < weekCount; w++) {
+      const weekDays = days.slice(w * 7, (w + 1) * 7);
+      let weekDrinks = 0;
+      weekDays.forEach(d => {
+        const v = data[dateKey(d)];
+        if (v !== undefined) weekDrinks += v;
+      });
+
+      const weekDiv = document.createElement('div');
+      weekDiv.className = 'week';
+
+      const firstDay = weekDays[0];
+      const lastDay = weekDays[weekDays.length - 1];
+      const rangeStr = `${monthNames[firstDay.getMonth()]} ${firstDay.getDate()} – ${monthNames[lastDay.getMonth()]} ${lastDay.getDate()}`;
+
+      let capClass = 'cap-safe';
+      let capMsg = `${weekDrinks} / 7 drinks`;
+      if (weekDrinks >= 7) { capClass = 'cap-over'; capMsg = `${weekDrinks} / 7 — over cap`; }
+      else if (weekDrinks >= 5) { capClass = 'cap-close'; capMsg = `${weekDrinks} / 7 — mind the cap`; }
+
+      let barClass = '';
+      if (weekDrinks >= 7) barClass = 'over';
+      else if (weekDrinks >= 5) barClass = 'close';
+      const barPct = Math.min(100, (weekDrinks / 7) * 100);
+
+      weekDiv.innerHTML = `
+        <div class="week-header">
+          <div class="week-title">Week ${w + 1} · ${rangeStr}</div>
+          <div class="week-cap ${capClass}">${capMsg}</div>
+        </div>
+        <div class="week-bar"><div class="week-bar-fill ${barClass}" style="width: ${barPct}%"></div></div>
+        <div class="days" id="week-${w}-days"></div>
+      `;
+      weeksEl.appendChild(weekDiv);
+
+      const daysEl = document.getElementById(`week-${w}-days`);
+      weekDays.forEach(d => {
+        const key = dateKey(d);
+        const v = data[key];
+        const isToday = d.getTime() === today.getTime();
+        const dayEl = document.createElement('div');
+        dayEl.className = 'day' + (v !== undefined ? ' logged' : '') + (isToday ? ' today' : '');
+
+        let pointsHtml = '';
+        if (v !== undefined) {
+          const pts = DRINK_POINTS[v];
+          totalPoints += pts;
+          daysLogged++;
+          if (v === 0) zeroDays++;
+          totalDrinks += v;
+          const cls = pts > 0 ? 'pt-pos' : (pts < 0 ? 'pt-neg' : 'pt-neu');
+          pointsHtml = `<div class="day-points ${cls}">${pts > 0 ? '+' : ''}${pts} pts</div>`;
+        } else {
+          pointsHtml = `<div class="day-points"></div>`;
+        }
+
+        dayEl.innerHTML = `
+          <div class="day-date">${dayNames[d.getDay()]}${isToday ? ' <span class="today-badge">TODAY</span>' : ''}</div>
+          <div class="day-num">${d.getDate()}</div>
+          <div class="drink-btns">
+            <button class="drink-btn ${v === 0 ? 'selected drinks-0' : ''}" data-key="${key}" data-val="0">0</button>
+            <button class="drink-btn ${v === 1 ? 'selected drinks-1' : ''}" data-key="${key}" data-val="1">1</button>
+            <button class="drink-btn ${v === 2 ? 'selected drinks-2' : ''}" data-key="${key}" data-val="2">2</button>
+            <button class="drink-btn ${v === 3 ? 'selected drinks-3' : ''}" data-key="${key}" data-val="3">3+</button>
+          </div>
+          ${pointsHtml}
+        `;
+        daysEl.appendChild(dayEl);
+      });
+    }
+
+    document.querySelectorAll('.drink-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-key');
+        const val = parseInt(btn.getAttribute('data-val'), 10);
+        if (data[key] === val) {
+          delete data[key];
+        } else {
+          data[key] = val;
+        }
+        saveData(data);
+        render();
+      });
+    });
+
+    document.getElementById('totalPoints').textContent = totalPoints;
+    document.getElementById('daysLogged').textContent = daysLogged;
+    document.getElementById('zeroDays').textContent = zeroDays;
+    document.getElementById('totalDrinks').textContent = totalDrinks;
+    document.getElementById('avgDrinks').textContent = daysLogged > 0 ? (totalDrinks / daysLogged).toFixed(1) : '0.0';
+
+    const pct = Math.max(0, Math.min(100, (totalPoints / FACIAL_TARGET) * 100));
+    document.getElementById('facialFill').style.width = pct + '%';
+    document.getElementById('facialPct').textContent = Math.round(pct) + '%';
+    const remaining = FACIAL_TARGET - totalPoints;
+    let msg = '';
+    if (totalPoints >= FACIAL_TARGET) {
+      msg = 'You did it! Time to book that facial.';
+    } else if (totalPoints >= 150) {
+      msg = `So close — only ${remaining} points from your facial`;
+    } else if (totalPoints >= 100) {
+      msg = `${remaining} points to go — you're more than halfway there`;
+    } else if (totalPoints > 0) {
+      msg = `${remaining} points away from booking your $170 facial`;
+    } else {
+      msg = `200 points away from booking your $170 facial`;
+    }
+    document.getElementById('facialMsg').textContent = msg;
+
+    const msEl = document.getElementById('milestones');
+    msEl.innerHTML = '';
+    MILESTONES.forEach(m => {
+      const unlocked = totalPoints >= m.pts;
+      const mEl = document.createElement('div');
+      mEl.className = 'milestone' + (unlocked ? ' unlocked' : '');
+      mEl.innerHTML = `
+        <div class="milestone-header">
+          <div class="milestone-check">${unlocked ? '&#10003;' : ''}</div>
+          <div class="milestone-points">${m.pts} pts</div>
+        </div>
+        <div class="milestone-title">${m.title}</div>
+        <div class="milestone-desc">${m.desc}</div>
+      `;
+      msEl.appendChild(mEl);
+    });
+  }
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (confirm('Reset all tracking data? This cannot be undone.')) {
+      data = {};
+      saveData(data);
+      render();
+      showToast('Data reset');
+    }
+  });
+
+  // Export
+  const exportModal = document.getElementById('exportModal');
+  const importModal = document.getElementById('importModal');
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const payload = { v: 1, data: data, exportedAt: new Date().toISOString() };
+    document.getElementById('exportText').value = JSON.stringify(payload);
+    exportModal.classList.add('active');
+  });
+  document.getElementById('exportClose').addEventListener('click', () => exportModal.classList.remove('active'));
+  document.getElementById('exportCopy').addEventListener('click', () => {
+    const ta = document.getElementById('exportText');
+    ta.select();
+    try {
+      navigator.clipboard.writeText(ta.value).then(() => showToast('Copied to clipboard!'));
+    } catch (e) {
+      document.execCommand('copy');
+      showToast('Copied!');
+    }
+  });
+
+  document.getElementById('importBtn').addEventListener('click', () => {
+    document.getElementById('importText').value = '';
+    importModal.classList.add('active');
+  });
+  document.getElementById('importCancel').addEventListener('click', () => importModal.classList.remove('active'));
+  document.getElementById('importConfirm').addEventListener('click', () => {
+    const raw = document.getElementById('importText').value.trim();
+    if (!raw) { showToast('Nothing to import'); return; }
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed.data === 'object') {
+        data = parsed.data;
+        saveData(data);
+        render();
+        importModal.classList.remove('active');
+        showToast('Imported successfully!');
+      } else {
+        showToast('That text doesn\'t look right');
+      }
+    } catch (e) {
+      showToast('Couldn\'t read that — check the text');
+    }
+  });
+
+  // Close modals on backdrop click
+  [exportModal, importModal].forEach(m => {
+    m.addEventListener('click', (e) => {
+      if (e.target === m) m.classList.remove('active');
+    });
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
